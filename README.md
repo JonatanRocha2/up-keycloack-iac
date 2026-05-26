@@ -33,7 +33,7 @@ When prompted for the vault password, please use: <ENTER_YOUR_PASSWORD_HERE> (No
 
 ### ✅ Proof of Execution
 
-![Keycloak working!](/img/keycloak.png)
+![Keycloak working!](/tests/keycloak-2.png)
 
 ### 🧠 Assumptions & Challenges
 
