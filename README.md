@@ -13,8 +13,8 @@ terraform init
 terraform apply -var="key_name=your_aws_ssh_key" -auto-approve
 ```
 
-[!NOTE]
-Take note of the `instance_public_ip` generated in the terminal output, as it will be required for the next step.
+> [!NOTE]
+> Take note of the `instance_public_ip` generated in the terminal output, as it will be required for the next step.
 
 2. Service Configuration (Ansible)
 This step configures the host, installs Docker and the Docker Compose plugin, and deploys the Keycloak stack (with PostgreSQL) securely. Sensitive credentials are encrypted using Ansible Vault.
