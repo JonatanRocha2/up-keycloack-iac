@@ -1,4 +1,4 @@
-name: CI/CD Pipeline Validation
+name: CI Pipeline Validation
 
 on:
   push:
@@ -30,7 +30,10 @@ jobs:
         steps:
             - name: Checkout Code
               uses: actions/checkout@v4
+            
+            - name: Install Ansible Lint
+              run: |
+                pip install ansible-lint
+            
             - name: Run ansible-lint
-              uses: ansible/ansible-lint@main
-              with:
-                args: ansible/playbook.yaml
+              run: ansible-lint ansible/playbook.yaml
