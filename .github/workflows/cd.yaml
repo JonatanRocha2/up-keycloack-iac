@@ -1,7 +1,10 @@
-name: Continuous Deployment (AWS + Keycloak)
+name: CD (AWS + Keycloak)
 
 on:
-  push:
+  workflow_run:
+    workflows: ["CI Pipeline Validation"]
+    types:
+      - completed
     branches:
       - main
 
@@ -9,6 +12,7 @@ jobs:
   deploy:
     name: Deploy Infrastructure and App
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - name: Checkout Repository
