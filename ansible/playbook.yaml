@@ -2,7 +2,7 @@
 - name: Setup Keycloak
   hosts: app
   become: true
-  vars_files: 
+  vars_files:
     - group_vars/vars.yaml
     - group_vars/vault.yaml
   roles:
