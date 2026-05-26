@@ -1,0 +1,35 @@
+---
+- name: Install required system packages
+  apt:
+    pkg:
+      - ca-certificates
+      - curl
+      - gnupg
+    state: latest
+    update_cache: yes
+
+- name: Create Docker GPG keyring directory
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+
+- name: Add Docker GPG key
+  get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.asc
+    mode: '0644'
+
+- name: Add Docker repository
+  apt_repository:
+    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }}  jammy stable"
+    state: present
+    filename: docker
+    update_cache: yes
+
+- name: Install Docker and Docker Compose
+  apt:
+    pkg:
+      - docker-ce
+      - docker-compose-plugin
+    state: latest

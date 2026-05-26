@@ -1,0 +1,25 @@
+# TERRAFORM
+.teraform/
+.terraform.lock.hcl
+.tfstate
+.tfstate.backup
+.terraform.tfstate
+.tfvars
+.tfvars.json
+
+# ANSIBLE
+*.retry
+
+# SECRET FILES
+*.pem
+*.key
+*.crt
+*.env
+*.rsa
+*.p12
+
+# IDE
+.vscode/
+.idea/
+DS_Store
+Thumbs.db

@@ -1,0 +1,4 @@
+keycloak_version: "22.0.1"
+postgres_version: "15"
+db_user: "keycloak"
+db_name: "keycloak"

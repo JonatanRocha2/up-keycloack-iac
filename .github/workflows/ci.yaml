@@ -1,0 +1,36 @@
+name: CI/CD Pipeline Validation
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+    validate-terraform:
+        name: Validate Terraform Format and Syntax
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ./terraform
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            - name: Set up Terraform
+              uses: hashicorp/setup-terraform@v2
+            - name: Terraform Init
+              run: terraform init -backend=false
+            - name: Terraform Format Check
+              run: terraform fmt -check
+            - name: Terraform Lint
+              run: terraform validate
+    validate-ansible:
+        name: Validate Ansible Playbook Syntax
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v4
+            - name: Run ansible-lint
+              uses: ansible/ansible-lint-action@v6
+              with:
+                path: "./ansible/"

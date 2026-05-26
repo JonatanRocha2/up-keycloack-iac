@@ -1,0 +1,16 @@
+---
+- name: Create Keycloak configuration directory
+  file:
+    path: /opt/keycloak
+    state: directory
+    mode: '0755'
+
+- name: Copy docker-compose template to Keycloak configuration directory
+  template:
+    src: docker-compose.yaml.j2
+    dest: /opt/keycloak/docker-compose.yaml
+
+- name: Start Keycloak using Docker Compose
+  command: /usr/bin/docker compose -f /opt/keycloak/docker-compose.yaml up -d
+  args:
+    chdir: /opt/keycloak

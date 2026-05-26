@@ -1,0 +1,38 @@
+services:
+  postgres:
+    image: postgres:{{ postgres_version }}
+    environment:
+      POSTGRES_USER: {{ db_user }}
+      POSTGRES_PASSWORD: {{ db_password }}
+      POSTGRES_DB: {{ db_name }}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - keycloak_network
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:{{ keycloak_version }}
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/{{ db_name }}
+      KC_DB_USERNAME: {{ db_user }}
+      KC_DB_PASSWORD: {{ db_password }}
+      KEYCLOAK_ADMIN: {{ keycloak_admin_user }}
+      KEYCLOAK_ADMIN_PASSWORD: {{ keycloak_admin_password }}
+      KEYCLOAK_PROXY: edge
+    command: start-dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    networks:
+      - keycloak_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  keycloak_network:
+    driver: bridge
