@@ -60,9 +60,12 @@ jobs:
         run: |
           echo "${{ secrets.VAULT_PASSWORD }}" > .vault_pass.txt
 
-          ansible-playbook -i "${{ env.EC2_IP }}," playbook.yaml \
+          echo "[app]" > dynamic_inventory.ini
+          echo "${{ env.EC2_IP }}" >> dynamic_inventory.ini
+
+          ansible-playbook -i dynamic_inventory.ini playbook.yaml \
             --vault-password-file .vault_pass.txt \
             -u ubuntu \
             --private-key ~/.ssh/id_rsa
 
-          rm .vault_pass.txt
+          rm .vault_pass.txt dynamic_inventory.ini
