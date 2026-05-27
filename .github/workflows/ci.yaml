@@ -8,6 +8,9 @@ on:
     branches:
       - main
     types: [opened, synchronize, reopened]
+    paths-ignore:
+      - '*.md'
+      - '.github/**'
 
 jobs:
   validate-terraform:
@@ -58,7 +61,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             const output = `#### 🏗️ Terraform Plan Preview
-            Resultado: \`${{ steps.tf-plan.outcome }}\`
+            Result: \`${{ steps.tf-plan.outcome }}\`
             
             <details><summary><strong>Clique para expandir e ver o plano completo</strong></summary>
 
@@ -68,7 +71,7 @@ jobs:
             
             </details>
 
-            *Acionado por: @${{ github.actor }}*`;
+            *Author: @${{ github.actor }}*`;
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
