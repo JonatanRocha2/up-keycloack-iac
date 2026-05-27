@@ -21,7 +21,7 @@ services:
       KEYCLOAK_ADMIN: {{ keycloak_admin_user }}
       KEYCLOAK_ADMIN_PASSWORD: {{ keycloak_admin_password }}
       KEYCLOAK_PROXY: edge
-    ansible.builtin.command: start-dev
+    command: start-dev
     ports:
       - "8080:8080"
     depends_on:
