@@ -12,6 +12,9 @@ jobs:
   validate-terraform:
     name: Validate Terraform Format and Syntax
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
     defaults:
       run:
         working-directory: ./terraform
@@ -31,6 +34,23 @@ jobs:
 
       - name: Terraform Lint
         run: terraform validate
+      
+      - name: Terraform Plan
+        id: tf-plan
+        working-directory: ./terraform
+        run: terraform plan -no-color
+        continue-on-error: true
+      
+      - name: Comment Terraform Plan Output
+        if: github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          header: "Terraform Plan Output"
+          message: |
+            ```
+            ${{ steps.tf-plan.outputs.stdout }}
+            ```
 
   validate-ansible:
     name: Validate Ansible Playbook Syntax
