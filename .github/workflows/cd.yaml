@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  deploy:
+  create-instance-and-deploy:
     name: Deploy Infrastructure and App
     runs-on: ubuntu-latest
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
@@ -26,7 +26,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+        uses: hashicorp/setup-terraform@v4
 
       - name: Terraform Init
         working-directory: ./terraform
@@ -40,7 +40,9 @@ jobs:
         id: tf-output
         working-directory: ./terraform
         run: |
-          echo "EC2_IP=$(terraform output -raw instance_public_ip)" >> $GITHUB_ENV
+          RAW_OUTPUT=$(terraform output -raw instance_public_ip)
+          CLEAN_IP=$(echo $RAW_OUTPUT | grep -oE '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' | head -n 1)
+          echo "EC2_IP=$CLEAN_IP" >> $GITHUB_ENV
 
       - name: Setup SSH Key
         run: |

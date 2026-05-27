@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  destroy:
+  destroy-instance:
     name: Tear Down AWS Infrastructure
     runs-on: ubuntu-latest
 
@@ -20,7 +20,7 @@ jobs:
           aws-region: ${{ vars.AWS_REGION }}
 
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: hashicorp/setup-terraform@v4
 
       - name: Terraform Init
         working-directory: ./terraform
