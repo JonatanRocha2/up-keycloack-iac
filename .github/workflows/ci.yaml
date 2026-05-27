@@ -48,15 +48,33 @@ jobs:
         run: terraform plan -no-color -var="key_name=${{ vars.KEY_NAME }}" -input=false
         continue-on-error: true
 
-      - name: Comment Terraform Plan Output
+      - name: Comment Plan on Pull Request
+        uses: actions/github-script@v7
         if: github.event_name == 'pull_request'
-        uses: marocchino/sticky-pull-request-comment@v3
+        env:
+          PLAN: "terraform\n${{ steps.tf-plan.outputs.stdout }}"
         with:
-          header: "Terraform Plan Output"
-          message: |
-            ```
-            ${{ steps.tf-plan.outputs.stdout }}
-            ```
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `#### 🏗️ Terraform Plan Preview
+            Resultado: \`${{ steps.tf-plan.outcome }}\`
+            
+            <details><summary><strong>Clique para expandir e ver o plano completo</strong></summary>
+
+            \`\`\`hcl
+            ${process.env.PLAN}
+            \`\`\`
+            
+            </details>
+
+            *Acionado por: @${{ github.actor }}*`;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
 
   validate-ansible:
     name: Validate Ansible Playbook Syntax
