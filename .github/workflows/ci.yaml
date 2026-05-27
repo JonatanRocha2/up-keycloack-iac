@@ -38,7 +38,7 @@ jobs:
       - name: Terraform Plan
         id: tf-plan
         working-directory: ./terraform
-        run: terraform plan -no-color
+        run: terraform plan -no-color -var="key_name=${{ vars.KEY_NAME }}" -input=false
         continue-on-error: true
       
       - name: Comment Terraform Plan Output
